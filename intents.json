@@ -1,0 +1,8 @@
+{"intents" : [
+  {"class" : "greeting",
+  "pattern" : [ "Good morning!", "Hello!"],
+  "responses" : ["Hello" , "Hay" , "Hi" , "Hola"]},
+  {"class" :  "fallback",
+  "pattern" :  ["bye","goodbye"],
+  "responses" : ["Bye","See you again","Take care , Bye","It was nice Meeting you"]}
+]}
