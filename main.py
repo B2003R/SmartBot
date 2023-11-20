@@ -1,9 +1,11 @@
 import json
+import random
 import numpy as np
 import pickle
 import nltk
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
+import mysql.connector
 # loading constructer and opening pickled files and loading model
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open('intents.json').read())
@@ -11,7 +13,13 @@ with open('words.pkl', 'rb') as f:
     words = pickle.load(f)
 with open('classes.pkl', 'rb') as f:
     classes = pickle.load(f)
-
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password = "Bollam23$",
+    database = "smartbot"
+)
+mycursor = db.cursor()
 # words = pickle.load('words.pickle','rb')
 # classes = pickle.load('words.pickle','rb')
 model = load_model('chatbot_model.h5')
@@ -38,8 +46,25 @@ def predict_class(sentence):
     results.sort(key= lambda x:x[1] , reverse=True)
     return_list = []
     for r in results:
-        print('intent :',classes[r[0]],"probability :",str(r[1]))
-
+        return_list.append({'intents' : classes[r[0]],"probability " : str(r[1])})
+    return return_list
+def get_responses(intent_list , intent_json):
+    tag = intent_list[0]['intents']
+    if tag == 'get_event':
+        mycursor.execute("select * from events")
+        for x in mycursor:
+            print(x[0])
+            print(x[1])
+            print("")
+    list_of_intents = intent_json['intents']
+    for i in list_of_intents:
+        if i['class'] == tag:
+            result = random.choice(i['responses'])
+            break
+    return result
 while True:
     sentence = input('Enter :')
-    predict_class(sentence)
+    ints = predict_class(sentence)
+    # print(ints)
+    res = get_responses(ints,intents)
+    print(res)

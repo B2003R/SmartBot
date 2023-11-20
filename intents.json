@@ -1,8 +1,28 @@
 {"intents" : [
   {"class" : "greeting",
-  "pattern" : [ "Good morning!", "Hello!"],
-  "responses" : ["Hello" , "Hay" , "Hi" , "Hola"]},
+  "pattern" : [ "Good morning!", "Hello!", "Hi there" , "Hey" , "greetings" , "Whats up?" , " yo!" ],
+  "responses" : ["Hello" , "Hay" , "Hi" , "Hola" , "Hi nice to meet you"]},
   {"class" :  "fallback",
-  "pattern" :  ["bye","goodbye"],
-  "responses" : ["Bye","See you again","Take care , Bye","It was nice Meeting you"]}
+  "pattern" :  ["bye","goodbye","Ok thank you bye" , " bye bye" , "see you later" , "Take care " , "Bye bro" , "good night" , " night night"],
+  "responses" : ["Bye","See you again","Take care , Bye","It was nice Meeting you"]},
+  {
+    "class": "get_event",
+    "pattern": [
+      "Get me events",
+      "Can you show me upcoming events?",
+      "What events are happening soon?",
+      "Could you provide me with a list of events?",
+      "I’m interested in attending events. Can you help me find some?",
+      "What’s happening in the city this week?",
+      "Can you suggest some events that I might enjoy?",
+      "I’m looking for something fun to do. What events are coming up?",
+      "Can you recommend some events that are worth checking out?",
+      "I’m trying to find some events to attend. Can you help me out?",
+      "What are some popular events happening in the area?"
+    ],
+    "responses": [
+      "here are your event",
+      "yo events"
+    ]
+  }
 ]}
