@@ -3,6 +3,7 @@ import random
 import numpy as np
 import pickle
 import nltk
+# nltk.download()
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
 import mysql.connector
@@ -17,7 +18,7 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     password = "Bollam23$",
-    database = "smartbot"
+    database = "main"
 )
 mycursor = db.cursor()
 # words = pickle.load('words.pickle','rb')
@@ -55,16 +56,87 @@ def get_responses(intent_list , intent_json):
         for x in mycursor:
             print(x[0])
             print(x[1])
+            print(x[2])
             print("")
+        pass
     list_of_intents = intent_json['intents']
     for i in list_of_intents:
         if i['class'] == tag:
             result = random.choice(i['responses'])
             break
     return result
-while True:
-    sentence = input('Enter :')
+def add_event(admin_id):
+    name = input('Please enter the event name:')
+    detail = input('please enter details of events :')
+    mycursor.execute('insert into events values(%s,null,%s,%s)',(name,detail,admin_id))
+    db.commit()
+
+
+def track_event(admin_id):
+    mycursor.execute('select event_id from events where admin_id = %s',(admin_id,))
+    parameter = mycursor.fetchone()
+    # for x in mycursor:
+    #     parameter = x[0]
+    mycursor.execute('select username,roll_no from users where event_id = %s',(parameter[0],))
+    # for x in mycursor:
+    #     print(x)
+    print(mycursor.fetchall())
+    print("Here you go")
+
+def admin_flow(id):
+    while True:
+        sentence = input('Hello '+id+' how can i help you : \n 1.Creat a Event \n 2.Track a Existing event')
+        ints = predict_class(sentence)
+        # print(ints)
+        if ints[0]['intents'] == 'add_event':
+            add_event(id)
+            print('Congraulations')
+        elif ints[0]['intents'] == 'track_event':
+            track_event(id)
+        else :
+            print(ints)
+
+def user_flow(id):
+    sentence = input('Hello '+id+' How can i help you \n 1.get event')
     ints = predict_class(sentence)
-    # print(ints)
-    res = get_responses(ints,intents)
-    print(res)
+    print(ints)
+    if ints[0]['intents'] == 'get_event':
+        mycursor.execute("select * from events")
+        for x in mycursor:
+            print(x[0])
+            print(x[1])
+            print(x[2])
+            print("")
+        val = input('If you wanna book any event ,Please enter its name')
+        # mycursor.execute("select username from users")
+        mycursor.execute("select * from events")
+        for x in mycursor:
+            print(x[0])
+            if x[0] == val:
+                mycursor.execute('select event_id from events where eventname = %s',(x[0],))
+                parameter = mycursor.fetchone()
+                # print(parameter)
+                mycursor.execute('update users set event_id = %s',(parameter[0],))
+                print('Congratulation you seat has been booked ! ')
+                db.commit()
+                break
+# while True:
+#     sentence = input('Enter :')
+#     ints = predict_class(sentence)
+#     # print(ints)
+#     res = get_responses(ints,intents)
+#     print(res)
+while True:
+    id = input('please enter id :')
+    password = input('please enter the password')
+    mycursor.execute('select * from admin')
+    for x in mycursor:
+        if x[0] == id and x[1] == password:
+            admin_flow(id)
+    mycursor.execute('select username,password from users')
+    for x in mycursor:
+        if x[0] == id and x[1] == password:
+            user_flow(id)
+            # print('hello user')
+            continue
+    print("wrong username or password")

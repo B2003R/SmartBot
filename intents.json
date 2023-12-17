@@ -1,10 +1,12 @@
 {"intents" : [
   {"class" : "greeting",
   "pattern" : [ "Good morning!", "Hello!", "Hi there" , "Hey" , "greetings" , "Whats up?" , " yo!" ],
-  "responses" : ["Hello" , "Hay" , "Hi" , "Hola" , "Hi nice to meet you"]},
+  "responses" : ["Hello" , "Hay" , "Hi" , "Hola" , "Hi nice to meet you"]
+  },
   {"class" :  "fallback",
   "pattern" :  ["bye","goodbye","Ok thank you bye" , " bye bye" , "see you later" , "Take care " , "Bye bro" , "good night" , " night night"],
-  "responses" : ["Bye","See you again","Take care , Bye","It was nice Meeting you"]},
+  "responses" : ["Bye","See you again","Take care , Bye","It was nice Meeting you"]
+  },
   {
     "class": "get_event",
     "pattern": [
@@ -18,11 +20,21 @@
       "I’m looking for something fun to do. What events are coming up?",
       "Can you recommend some events that are worth checking out?",
       "I’m trying to find some events to attend. Can you help me out?",
-      "What are some popular events happening in the area?"
+      "What are some popular events happening in the area?",
+      "get event",
+      "get events"
     ],
     "responses": [
       "here are your event",
       "yo events"
     ]
+  },
+  {
+    "class": "add_event",
+    "pattern": ["hey i need to add event","add event","can i add event","create a event","creating a event","start a event","start event","staring event","prepare to open a event" ]
+  },
+  {
+    "class": "track_event",
+    "pattern": ["track exisiting order","give me update about the event"," update about the event","track event","how many have registered for the event" , "give me registation count","how many registrations","track the event","what is the update","give me update"]
   }
 ]}
